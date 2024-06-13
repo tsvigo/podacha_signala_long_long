@@ -13,6 +13,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <vector>
+
 // Структура для хранения заголовка BMP файла
 static_assert(true); // dummy declaration, ends the preamble
 #pragma pack(push, 1)
