@@ -15,3 +15,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 //###########################################################################
 QT += widgets gui
+
+CONFIG += console
+CONFIG -= app_bundle
+
+

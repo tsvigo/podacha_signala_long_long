@@ -21,7 +21,21 @@
 #include <iostream>
 #include <stdexcept>
 #include <vector>
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#include <QApplication>
 
+#include <QFile>
+#include <QDataStream>
+#include <QDebug>
+
+#include <QCoreApplication>
+
+#include <QFileDialog>
+
+#include <QStringList>
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Структура для хранения заголовка BMP файла
 static_assert(true); // dummy declaration, ends the preamble
 #pragma pack(push, 1)
@@ -45,7 +59,38 @@ struct BMPHeader
     uint32_t biClrImportant;
 };
 #pragma pack(pop)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Функция для преобразования пикселя в число типа long long
+long long convertPixelToLongLong(const QRgb &pixel) {
+    // Пример преобразования пикселя (RGBA) в число long long
+    // Здесь мы просто используем значение пикселя напрямую
+    // Это может быть изменено в зависимости от специфики преобразования
+    return static_cast<long long>(pixel);
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Функция для загрузки изображения и преобразования его пикселей в vector<long long>
+std::vector<long long> convertImageToVector(const QString &imagePath) {
+    std::vector<long long> pixelData;
 
+    // Загрузка изображения
+    QImage image(imagePath);
+    if (image.isNull()) {
+        qDebug() << "Failed to load image";
+        return pixelData;
+    }
+
+    // Обход всех пикселей изображения
+    for (int y = 0; y < image.height(); ++y) {
+        for (int x = 0; x < image.width(); ++x) {
+            QRgb pixel = image.pixel(x, y);
+            long long value = convertPixelToLongLong(pixel);
+            pixelData.push_back(value); // Добавление значения в vector
+        }
+    }
+
+    return pixelData;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //std::vector<long long> readBMP(const std::string &filename)
 //{
 //    std::ifstream file(filename, std::ios::binary);
@@ -148,27 +193,53 @@ void printBinaryFileContent(const std::string &filename)
     }
 }
 
-int main()
+int main(int argc, char *argv[])
 {
+    // Используем QApplication вместо QCoreApplication, чтобы поддерживать графические компоненты
+    QApplication app(argc, argv);
+
+    // Вызов диалога выбора файла
+    QString fileName = QFileDialog::getOpenFileName(nullptr, "Выберите файл", "/home/viktor/1_rukoy/",  "bmp Files (*.bmp)");
+
+    // Проверка, был ли файл выбран
+    if (!fileName.isEmpty()) {
+        qDebug() << "Выбранный файл:" << fileName;
+    } else {
+        qDebug() << "Файл не был выбран.";
+    }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     try {
         // Загрузка изображения BMP
-        QImage image("/home/viktor/Загрузки/data/none/300/masshtab/black-white/1.bmp");
-        if (image.isNull()) {
-            throw std::runtime_error("Ошибка загрузки изображения.");
-        }
+        // QImage image("/home/viktor/Загрузки/data/none/300/masshtab/black-white/1.bmp");
+        // if (image.isNull()) {
+        //     throw std::runtime_error("Ошибка загрузки изображения.");
+        // }
 
-        // Преобразование пикселей изображения в long long числа
-        std::vector<long long> bmpValues = convertImageToLongLong(image);
-        // Чтение BMP файла и преобразование пикселей в long long числа
-        //        std::vector<long long> bmpValues = readBMP(
-        //            "/home/viktor/Загрузки/data/none/300/masshtab/black-white/1.bmp");
+        // // Преобразование пикселей изображения в long long числа
+        // std::vector<long long> bmpValues = convertImageToLongLong(image);
+        // // Чтение BMP файла и преобразование пикселей в long long числа
+        // //        std::vector<long long> bmpValues = readBMP(
+        // //            "/home/viktor/Загрузки/data/none/300/masshtab/black-white/1.bmp");
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        QString imagePath =fileName;
+            //"/home/viktor/1_rukoy/Sprite-0001-m.bmp";
+
+        // Преобразование изображения в vector<long long>
+        std::vector<long long> pixelData = convertImageToVector(imagePath);
+
+        // Проверка и вывод результата
+        if (!pixelData.empty()) {
+            qDebug() << "Image converted successfully. Number of pixels:" << pixelData.size();
+        } else {
+            qDebug() << "Failed to convert image";
+        }
 
         // Чтение бинарного файла с long long числами
         std::vector<long long> binValues = readBinaryFile(
             "/home/viktor/my_projects_qt_2/sgenerirovaty_long_long_neyroni/random_numbers.bin");
 
         // Объединение векторов
-        std::vector<long long> mergedValues = mergeVectors(bmpValues, binValues);
+        std::vector<long long> mergedValues = mergeVectors(pixelData, binValues);
 
         // Запись объединенного вектора в новый бинарный файл
         writeBinaryFile("/home/viktor/my_projects_qt_2/podacha_signala_long_long/"
@@ -182,6 +253,9 @@ int main()
         std::cerr << e.what() << std::endl;
         return 1;
     }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     return 0;
-}
+  };
