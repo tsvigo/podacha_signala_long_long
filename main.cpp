@@ -91,32 +91,7 @@ std::vector<long long> convertImageToVector(const QString &imagePath) {
     return pixelData;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//std::vector<long long> readBMP(const std::string &filename)
-//{
-//    std::ifstream file(filename, std::ios::binary);
-//    if (!file)
-//        throw std::runtime_error("Ошибка открытия BMP файла.");
 
-//    BMPHeader header;
-//    file.read(reinterpret_cast<char *>(&header), sizeof(header));
-//    if (header.bfType != 0x4D42)
-//        throw std::runtime_error("Некорректный BMP файл.");
-
-//    // Переходим к пикселям изображения
-//    file.seekg(header.bfOffBits, std::ios::beg);
-
-//    // Считываем пиксели (предполагаем, что изображение 10x10 пикселей, 24 бита на пиксель)
-//    int pixelCount = 100;
-//    std::vector<long long> pixelValues(pixelCount);
-//    for (int i = 0; i < pixelCount; ++i) {
-//        unsigned char pixel[3];
-//        file.read(reinterpret_cast<char *>(pixel), 3);
-//        long long value = (pixel[2] << 16) | (pixel[1] << 8) | pixel[0]; // RGB в long long
-//        pixelValues[i] = value;
-//    }
-
-//    return pixelValues;
-//}
 //###########################################################################
 // Функция для преобразования пикселей изображения в long long числа
 std::vector<long long> convertImageToLongLong(const QImage &image)
@@ -199,7 +174,8 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     // Вызов диалога выбора файла
-    QString fileName = QFileDialog::getOpenFileName(nullptr, "Выберите файл", "/home/viktor/1_rukoy/",  "bmp Files (*.bmp)");
+    QString fileName = QFileDialog::getOpenFileName(nullptr, "Выберите файл",
+      "/home/viktor/1_rukoy/ne_1/scale/",  "bmp Files (*.bmp)");
 
     // Проверка, был ли файл выбран
     if (!fileName.isEmpty()) {
@@ -209,17 +185,7 @@ int main(int argc, char *argv[])
     }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     try {
-        // Загрузка изображения BMP
-        // QImage image("/home/viktor/Загрузки/data/none/300/masshtab/black-white/1.bmp");
-        // if (image.isNull()) {
-        //     throw std::runtime_error("Ошибка загрузки изображения.");
-        // }
 
-        // // Преобразование пикселей изображения в long long числа
-        // std::vector<long long> bmpValues = convertImageToLongLong(image);
-        // // Чтение BMP файла и преобразование пикселей в long long числа
-        // //        std::vector<long long> bmpValues = readBMP(
-        // //            "/home/viktor/Загрузки/data/none/300/masshtab/black-white/1.bmp");
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         QString imagePath =fileName;
             //"/home/viktor/1_rukoy/Sprite-0001-m.bmp";
