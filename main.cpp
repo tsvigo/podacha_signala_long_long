@@ -240,15 +240,36 @@ int main(int argc, char *argv[])
 
         // Объединение векторов
         std::vector<long long> mergedValues = mergeVectors(pixelData, binValues);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Разбор пути и создание нового имени файла
+        QDir dir = QFileInfo(fileName).absoluteDir();
+        QString baseName = QFileInfo(fileName).fileName();
+        QString newDir = dir.absolutePath() + "/combined_numbers";
 
+        // Убедимся, что директория "combined_numbers" существует
+        if (!QDir().exists(newDir)) {
+            QDir().mkdir(newDir);
+        }
+
+        QString newFileName = newDir + "/" + baseName + "_combined_numbers.bin";
+
+        qDebug() << "Исходный файл:" << fileName;
+        qDebug() << "Новый файл:" << newFileName;
+        // Преобразование QString в std::string
+        std::string stdFileName = newFileName.toStdString();
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Запись объединенного вектора в новый бинарный файл
-        writeBinaryFile("/home/viktor/my_projects_qt_2/podacha_signala_long_long/"
-                        "combined_numbers.bin",
+        writeBinaryFile(stdFileName,
+        //    "/home/viktor/my_projects_qt_2/podacha_signala_long_long/"
+         //               "combined_numbers.bin",
                         mergedValues);
 
         // Проверка содержимого нового бинарного файла
-        printBinaryFileContent("/home/viktor/my_projects_qt_2/podacha_signala_long_long/"
-                               "combined_numbers.bin");
+        printBinaryFileContent(
+          //  "/home/viktor/my_projects_qt_2/podacha_signala_long_long/"
+                //               "combined_numbers.bin"
+            stdFileName
+                               );
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return 1;
