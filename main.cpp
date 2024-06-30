@@ -183,6 +183,13 @@ int main(int argc, char *argv[])
     } else {
         qDebug() << "Файл не был выбран.";
     }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// вместо диалога выбора файла перебор по списку
+    // Получение списка файлов с расширением .bmp в исходном каталоге
+        QString sourceDirPath = "/home/viktor/1_rukoy/ne_1/scale/";
+    QDir sourceDir(sourceDirPath);
+    QStringList bmpFiles = sourceDir.entryList(QStringList() << "*.bmp", QDir::Files);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     try {
 
@@ -224,6 +231,7 @@ int main(int argc, char *argv[])
         // Преобразование QString в std::string
         std::string stdFileName = newFileName.toStdString();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // если файл ещё не существует то
         // Запись объединенного вектора в новый бинарный файл
         writeBinaryFile(stdFileName,
         //    "/home/viktor/my_projects_qt_2/podacha_signala_long_long/"
