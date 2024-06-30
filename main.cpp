@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 
     // Вызов диалога выбора файла
     QString fileName = QFileDialog::getOpenFileName(nullptr, "Выберите файл",
-      "/home/viktor/1_rukoy/ne_1/scale/",  "bmp Files (*.bmp)");
+      "/home/viktor/1_rukoy/scale/",  "bmp Files (*.bmp)");
 
     // Проверка, был ли файл выбран
     if (!fileName.isEmpty()) {
@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // вместо диалога выбора файла перебор по списку
     // Получение списка файлов с расширением .bmp в исходном каталоге
-        QString sourceDirPath = "/home/viktor/1_rukoy/ne_1/scale/";
+        QString sourceDirPath = "/home/viktor/1_rukoy/scale/";
     QDir sourceDir(sourceDirPath);
     QStringList bmpFiles = sourceDir.entryList(QStringList() << "*.bmp", QDir::Files);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
